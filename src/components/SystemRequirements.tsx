@@ -9,7 +9,8 @@ const SystemRequirements = () => {
 
   const requirements = {
     hardware: [
-      { title: "GPU", description: "Minimum 8GB VRAM", required: true }
+      { title: "NVIDIA GPU", description: "Minimum 8GB VRAM", required: true },
+      { title: "x86 CPU", description: "64-bit compatible", required: true }
     ],
     os: [
       { title: "Linux", description: "Ubuntu 22.04+ (64-bit) recommended", required: true },
@@ -18,11 +19,9 @@ const SystemRequirements = () => {
     ],
     software: [
       { title: "Python", description: "3.11", link: "https://docs.python.org/3.11/", required: true },
-      { title: "PyTorch", description: "2.6", link: "https://pytorch.org/docs/stable/index.html", required: true },
-      { title: "CUDA", description: "12.8", link: "https://docs.nvidia.com/cuda/", required: true },
+      { title: "PyTorch with CUDA", description: "2.6", link: "https://pytorch.org/docs/stable/index.html", required: true },
       { title: "Hivemind", description: "Latest", link: "https://github.com/learning-at-home/hivemind", required: true },
-      { title: "DataTrove", description: "Latest", link: "https://github.com/huggingface/datatrove", required: true },
-      { title: "Other Packages", description: "wandb, git, huggingface_hub, transformers, datasets", required: true }
+      { title: "DataTrove", description: "Latest", link: "https://github.com/huggingface/datatrove", required: true }
     ]
   };
 
