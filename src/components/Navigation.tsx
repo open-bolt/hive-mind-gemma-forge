@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
 import { Button } from '@/components/ui/button';
-import { Github, BookOpen, Globe, Database, Code, Discord, WandB } from 'lucide-react';
+import { Github, BookOpen, Globe, Database, Code, MessageSquare } from 'lucide-react';
 
 const Navigation = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);

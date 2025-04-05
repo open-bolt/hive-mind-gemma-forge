@@ -1,6 +1,6 @@
 
 import { Card, CardContent } from "@/components/ui/card";
-import { Github, BookOpen, Globe, Database, Code, Discord, Upload } from "lucide-react";
+import { Github, BookOpen, Globe, Database, Code, MessageSquare, Upload } from "lucide-react";
 
 const ResourceLinks = () => {
   const resources = [
@@ -19,7 +19,7 @@ const ResourceLinks = () => {
     {
       title: "Discord",
       description: "Join our community discussions",
-      icon: <Discord className="h-8 w-8 text-charcoal" />,
+      icon: <MessageSquare className="h-8 w-8 text-charcoal" />,
       url: "#",
     },
     {

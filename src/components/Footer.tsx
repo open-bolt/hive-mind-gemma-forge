@@ -1,6 +1,6 @@
 
 import { Link } from "react-router-dom";
-import { Github, BookOpen, Database, Discord, Globe } from "lucide-react";
+import { Github, BookOpen, Database, MessageSquare, Globe } from "lucide-react";
 
 const Footer = () => {
   return (
@@ -17,7 +17,7 @@ const Footer = () => {
                 <Github className="h-5 w-5" />
               </a>
               <a href="#" className="text-gray-400 hover:text-white" aria-label="Discord">
-                <Discord className="h-5 w-5" />
+                <MessageSquare className="h-5 w-5" />
               </a>
               <a href="#" className="text-gray-400 hover:text-white" aria-label="HuggingFace">
                 <Database className="h-5 w-5" />
