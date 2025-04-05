@@ -3,16 +3,15 @@ import { Button } from "@/components/ui/button";
 import { Link } from "react-router-dom";
 import { Card, CardContent, CardHeader } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
+import { useTopContributors } from "@/services/leaderboardService";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const LeaderboardPreview = () => {
-  // Dummy data for the leaderboard preview
-  const leaderboardEntries = [
-    { rank: 1, name: "neural_nexus", steps: 34567, gpuType: "RTX 4090", country: "🇺🇸" },
-    { rank: 2, name: "tensor_titan", steps: 32912, gpuType: "A100", country: "🇩🇪" },
-    { rank: 3, name: "deep_dreamer", steps: 29845, gpuType: "RTX 4080", country: "🇯🇵" },
-    { rank: 4, name: "ml_maestro", steps: 27601, gpuType: "RTX 3090", country: "🇬🇧" },
-    { rank: 5, name: "quantum_quokka", steps: 25733, gpuType: "RTX 4090", country: "🇦🇺" },
-  ];
+  const { data: leaderboardEntries, isLoading, error } = useTopContributors(5);
+
+  if (error) {
+    console.error("Error loading contributors:", error);
+  }
 
   return (
     <div className="py-16 bg-gray-50">
@@ -40,27 +39,59 @@ const LeaderboardPreview = () => {
             </div>
           </CardHeader>
           <CardContent className="p-0">
-            {leaderboardEntries.map((entry, index) => (
-              <div 
-                key={index} 
-                className={`grid grid-cols-12 gap-4 p-4 text-sm ${
-                  index % 2 === 0 ? "bg-white" : "bg-gray-50"
-                } ${index === 0 ? "border-l-4 border-orange" : ""}`}
-              >
-                <div className="col-span-1 text-center font-semibold">
-                  {entry.rank}
+            {isLoading ? (
+              // Loading skeletons
+              Array(5).fill(0).map((_, index) => (
+                <div 
+                  key={index} 
+                  className={`grid grid-cols-12 gap-4 p-4 text-sm ${
+                    index % 2 === 0 ? "bg-white" : "bg-gray-50"
+                  }`}
+                >
+                  <div className="col-span-1 text-center">
+                    <Skeleton className="h-5 w-5 mx-auto" />
+                  </div>
+                  <div className="col-span-3">
+                    <Skeleton className="h-5 w-32" />
+                  </div>
+                  <div className="col-span-3 text-center">
+                    <Skeleton className="h-5 w-24 mx-auto" />
+                  </div>
+                  <div className="col-span-3">
+                    <Skeleton className="h-5 w-20" />
+                  </div>
+                  <div className="col-span-2">
+                    <Skeleton className="h-5 w-8" />
+                  </div>
                 </div>
-                <div className="col-span-3 font-medium">{entry.name}</div>
-                <div className="col-span-3 text-center">
-                  <span className="font-mono font-medium">{entry.steps.toLocaleString()}</span>
-                  {index === 0 && (
-                    <Badge className="ml-2 bg-orange">Leader</Badge>
-                  )}
+              ))
+            ) : leaderboardEntries ? (
+              leaderboardEntries.map((entry, index) => (
+                <div 
+                  key={entry.id}
+                  className={`grid grid-cols-12 gap-4 p-4 text-sm ${
+                    index % 2 === 0 ? "bg-white" : "bg-gray-50"
+                  } ${index === 0 ? "border-l-4 border-orange" : ""}`}
+                >
+                  <div className="col-span-1 text-center font-semibold">
+                    {entry.rank}
+                  </div>
+                  <div className="col-span-3 font-medium">{entry.name}</div>
+                  <div className="col-span-3 text-center">
+                    <span className="font-mono font-medium">{entry.steps.toLocaleString()}</span>
+                    {index === 0 && (
+                      <Badge className="ml-2 bg-orange">Leader</Badge>
+                    )}
+                  </div>
+                  <div className="col-span-3">{entry.gpu_type}</div>
+                  <div className="col-span-2">{entry.country}</div>
                 </div>
-                <div className="col-span-3">{entry.gpuType}</div>
-                <div className="col-span-2">{entry.country}</div>
+              ))
+            ) : (
+              <div className="text-center py-10">
+                <p>No contributor data available.</p>
               </div>
-            ))}
+            )}
           </CardContent>
         </Card>
 

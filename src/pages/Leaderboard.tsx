@@ -4,21 +4,15 @@ import Footer from "@/components/Footer";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { useContributors } from "@/services/leaderboardService";
+import { Skeleton } from "@/components/ui/skeleton";
 
 const Leaderboard = () => {
-  // Dummy data for leaderboard
-  const contributors = [
-    { rank: 1, name: "neural_nexus", steps: 34567, gpuType: "RTX 4090", country: "🇺🇸", totalHours: 425 },
-    { rank: 2, name: "tensor_titan", steps: 32912, gpuType: "A100", country: "🇩🇪", totalHours: 389 },
-    { rank: 3, name: "deep_dreamer", steps: 29845, gpuType: "RTX 4080", country: "🇯🇵", totalHours: 367 },
-    { rank: 4, name: "ml_maestro", steps: 27601, gpuType: "RTX 3090", country: "🇬🇧", totalHours: 312 },
-    { rank: 5, name: "quantum_quokka", steps: 25733, gpuType: "RTX 4090", country: "🇦🇺", totalHours: 301 },
-    { rank: 6, name: "gradient_guru", steps: 23154, gpuType: "RTX 3090", country: "🇨🇦", totalHours: 288 },
-    { rank: 7, name: "pytorch_phoenix", steps: 21876, gpuType: "RTX 4070", country: "🇮🇳", totalHours: 276 },
-    { rank: 8, name: "tensor_traveler", steps: 20133, gpuType: "RTX 3080", country: "🇫🇷", totalHours: 254 },
-    { rank: 9, name: "algo_astronaut", steps: 19455, gpuType: "RTX 4090", country: "🇧🇷", totalHours: 241 },
-    { rank: 10, name: "model_maverick", steps: 18321, gpuType: "RTX 3080 Ti", country: "🇳🇱", totalHours: 227 },
-  ];
+  const { data: contributors, isLoading, error } = useContributors();
+
+  if (error) {
+    console.error("Error loading contributors:", error);
+  }
 
   return (
     <div className="min-h-screen bg-gray-50">
@@ -67,30 +61,65 @@ const Leaderboard = () => {
                   </div>
                 </CardHeader>
                 <CardContent className="p-0">
-                  {contributors.map((entry, index) => (
-                    <div 
-                      key={index} 
-                      className={`grid grid-cols-12 gap-4 p-4 text-sm ${
-                        index % 2 === 0 ? "bg-white" : "bg-gray-50"
-                      } ${index === 0 ? "border-l-4 border-orange" : ""}`}
-                    >
-                      <div className="col-span-1 text-center font-semibold">
-                        {entry.rank}
+                  {isLoading ? (
+                    // Loading skeletons
+                    Array(10).fill(0).map((_, index) => (
+                      <div 
+                        key={index} 
+                        className={`grid grid-cols-12 gap-4 p-4 text-sm ${
+                          index % 2 === 0 ? "bg-white" : "bg-gray-50"
+                        }`}
+                      >
+                        <div className="col-span-1 text-center">
+                          <Skeleton className="h-5 w-5 mx-auto" />
+                        </div>
+                        <div className="col-span-3">
+                          <Skeleton className="h-5 w-32" />
+                        </div>
+                        <div className="col-span-2 text-center">
+                          <Skeleton className="h-5 w-24 mx-auto" />
+                        </div>
+                        <div className="col-span-2 text-center">
+                          <Skeleton className="h-5 w-16 mx-auto" />
+                        </div>
+                        <div className="col-span-2">
+                          <Skeleton className="h-5 w-20" />
+                        </div>
+                        <div className="col-span-2">
+                          <Skeleton className="h-5 w-8" />
+                        </div>
                       </div>
-                      <div className="col-span-3 font-medium">{entry.name}</div>
-                      <div className="col-span-2 text-center">
-                        <span className="font-mono font-medium">{entry.steps.toLocaleString()}</span>
-                        {index === 0 && (
-                          <Badge className="ml-2 bg-orange">Leader</Badge>
-                        )}
+                    ))
+                  ) : contributors ? (
+                    contributors.map((entry, index) => (
+                      <div 
+                        key={entry.id} 
+                        className={`grid grid-cols-12 gap-4 p-4 text-sm ${
+                          index % 2 === 0 ? "bg-white" : "bg-gray-50"
+                        } ${index === 0 ? "border-l-4 border-orange" : ""}`}
+                      >
+                        <div className="col-span-1 text-center font-semibold">
+                          {entry.rank}
+                        </div>
+                        <div className="col-span-3 font-medium">{entry.name}</div>
+                        <div className="col-span-2 text-center">
+                          <span className="font-mono font-medium">{entry.steps.toLocaleString()}</span>
+                          {index === 0 && (
+                            <Badge className="ml-2 bg-orange">Leader</Badge>
+                          )}
+                        </div>
+                        <div className="col-span-2 text-center">
+                          <span className="font-mono">{entry.total_hours}</span>
+                        </div>
+                        <div className="col-span-2">{entry.gpu_type}</div>
+                        <div className="col-span-2">{entry.country}</div>
                       </div>
-                      <div className="col-span-2 text-center">
-                        <span className="font-mono">{entry.totalHours}</span>
-                      </div>
-                      <div className="col-span-2">{entry.gpuType}</div>
-                      <div className="col-span-2">{entry.country}</div>
+                    ))
+                  ) : (
+                    <div className="text-center py-10">
+                      <p>No contributor data available.</p>
                     </div>
-                  ))}
+                  )}
                 </CardContent>
               </Card>
             </TabsContent>

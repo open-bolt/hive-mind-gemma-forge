@@ -9,7 +9,104 @@ export type Json =
 export type Database = {
   public: {
     Tables: {
-      [_ in never]: never
+      blog_post_tags: {
+        Row: {
+          id: string
+          post_id: string
+          tag: string
+        }
+        Insert: {
+          id?: string
+          post_id: string
+          tag: string
+        }
+        Update: {
+          id?: string
+          post_id?: string
+          tag?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "blog_post_tags_post_id_fkey"
+            columns: ["post_id"]
+            isOneToOne: false
+            referencedRelation: "blog_posts"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      blog_posts: {
+        Row: {
+          author: string
+          content: string | null
+          created_at: string
+          date: string
+          excerpt: string
+          id: string
+          slug: string
+          title: string
+          updated_at: string
+        }
+        Insert: {
+          author: string
+          content?: string | null
+          created_at?: string
+          date: string
+          excerpt: string
+          id?: string
+          slug: string
+          title: string
+          updated_at?: string
+        }
+        Update: {
+          author?: string
+          content?: string | null
+          created_at?: string
+          date?: string
+          excerpt?: string
+          id?: string
+          slug?: string
+          title?: string
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      contributors: {
+        Row: {
+          country: string
+          created_at: string
+          gpu_type: string
+          id: string
+          name: string
+          rank: number
+          steps: number
+          total_hours: number
+          updated_at: string
+        }
+        Insert: {
+          country: string
+          created_at?: string
+          gpu_type: string
+          id?: string
+          name: string
+          rank: number
+          steps: number
+          total_hours: number
+          updated_at?: string
+        }
+        Update: {
+          country?: string
+          created_at?: string
+          gpu_type?: string
+          id?: string
+          name?: string
+          rank?: number
+          steps?: number
+          total_hours?: number
+          updated_at?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
